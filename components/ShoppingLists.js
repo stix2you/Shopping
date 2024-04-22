@@ -25,7 +25,7 @@ const ShoppingLists = ({ db }) => {
 
 
    return (
-      <View style={Styles.container}>
+      <View style={styles.container}>
          <FlatList
             data={lists}
             renderItem={({ item }) =>
