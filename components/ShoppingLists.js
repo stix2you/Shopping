@@ -1,8 +1,11 @@
 import { StyleSheet, View, FlatList, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, onSnapshot } from 'firebase/firestore';
+import { collection, getDocs, addDoc, onSnapshot, query, where } from 'firebase/firestore';
 
-const ShoppingLists = ({ db }) => {
+const ShoppingLists = ({ db, route }) => {
+   // extract the userID from the route params
+   const { userID } = route.params;
+
    // state for shopping lists
    const [lists, setLists] = useState([]);
 
@@ -13,7 +16,8 @@ const ShoppingLists = ({ db }) => {
 
    useEffect(() => {
       // Create a listener for changes to the shoppinglists collection in Firestore
-      const unsubShoppinglists = onSnapshot(collection(db, "shoppinglists"), (documentsSnapshot) => {
+      const q= query(collection(db, "shoppinglists"), where("uid", "==", userID));
+      const unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
          let newLists = [];
          documentsSnapshot.forEach(docObject => {
             newLists.push({ id: docObject.id, ...docObject.data() })
@@ -71,6 +75,7 @@ const ShoppingLists = ({ db }) => {
                style={styles.addButton}
                onPress={() => {
                   const newList = {  // this is where we are creating the new list object, assign to newList
+                     uid: userID,
                      name: listName,
                      items: [item1, item2]
                   }
