@@ -12,6 +12,10 @@ import { getFirestore } from "firebase/firestore";
 import ShoppingLists from './components/ShoppingLists';
 import Welcome from './components/Welcome';
 
+// Ignore the warning about AsyncStorage
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
+
 const App = () => {
    const firebaseConfig = {
       apiKey: "AIzaSyCAXqjfUSDfcJoxKQO8xTiayEHVcGvcIJU",
