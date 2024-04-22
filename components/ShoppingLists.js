@@ -1,6 +1,6 @@
 import { StyleSheet, View, FlatList, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, onSnapshot } from 'firebase/firestore';
 
 const ShoppingLists = ({ db }) => {
    // state for shopping lists
@@ -11,21 +11,20 @@ const ShoppingLists = ({ db }) => {
    const [item1, setItem1] = useState("");
    const [item2, setItem2] = useState("");
 
-   // fetch all shopping lists from Firestore asynchronously, then call this within useEffect() 
-   // can't use async directly in useEffect()
-   const fetchShoppingLists = async () => {
-      const listsDocuments = await getDocs(collection(db, "shoppinglists"));
-      let newLists = [];
-      listsDocuments.forEach(docObject => {
-         newLists.push({ id: docObject.id, ...docObject.data() });
-      });
-      setLists(newLists);
-   }
-
    useEffect(() => {
-      fetchShoppingLists();
-   }, [`${lists}`]);  // when 'lists' state changes, force a render cycle
-   // use ${lists} instead of {lists} to avoid memory reference issues (stringify the complex data-type variable)
+      // Create a listener for changes to the shoppinglists collection in Firestore
+      const unsubShoppinglists = onSnapshot(collection(db, "shoppinglists"), (documentsSnapshot) => {
+         let newLists = [];
+         documentsSnapshot.forEach(docObject => {
+            newLists.push({ id: docObject.id, ...docObject.data() })
+         });
+         setLists(newLists);
+      });
+      // Clean up code
+      return () => {
+         if (unsubShoppinglists) unsubShoppinglists();
+      }
+   }, []);
 
    // takes a new object structured as a shopping list (newList) and adds the data to Firestore
    const addShoppingList = async (newList) => {
@@ -74,7 +73,7 @@ const ShoppingLists = ({ db }) => {
                   const newList = {  // this is where we are creating the new list object, assign to newList
                      name: listName,
                      items: [item1, item2]
-                  }  
+                  }
                   addShoppingList(newList);   // call the addShoppingList function with the newList object
                }}
             >
