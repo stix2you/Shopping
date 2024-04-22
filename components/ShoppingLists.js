@@ -8,7 +8,7 @@ const ShoppingLists = ({ db }) => {
    // fetch all shopping lists from Firestore asynchronously, then call this within useEffect() 
    // can't use async directly in useEffect()
    const fetchShoppingLists = async () => {
-      const listsDocuments = await getDocs(collection(db, "shoppingLists"));
+      const listsDocuments = await getDocs(collection(db, "shoppinglists"));
       let newLists = [];
       listsDocuments.forEach(docObject => {
          newLists.push({ id: docObject.id, ...docObject.data() });
@@ -20,9 +20,6 @@ const ShoppingLists = ({ db }) => {
       fetchShoppingLists();
    }, [`${lists}`]);  // when 'lists' state changes, force a render cycle
    // use ${lists} instead of {lists} to avoid memory reference issues (stringify the complex data-type variable)
-
-
-
 
    return (
       <View style={styles.container}>
