@@ -1,20 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// import React Navigation
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+// Create the navigator
+const Stack = createNativeStackNavigator();
+
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+// import the screens
+import ShoppingLists from './components/ShoppingLists';
+
+const App = () => {
+   const firebaseConfig = {
+      apiKey: "AIzaSyCAXqjfUSDfcJoxKQO8xTiayEHVcGvcIJU",
+      authDomain: "shopping-list-demo-fd4a8.firebaseapp.com",
+      projectId: "shopping-list-demo-fd4a8",
+      storageBucket: "shopping-list-demo-fd4a8.appspot.com",
+      messagingSenderId: "319539977302",
+      appId: "1:319539977302:web:9a9bdc7882687013d56ff7"
+   };
+
+   // Initialize Firebase
+   const app = initializeApp(firebaseConfig);
+
+   // Initialize Cloud Firestore and get a reference to the service
+   const db = getFirestore(app);
+
+   return (
+      <NavigationContainer>
+         <Stack.Navigator
+            initialRouteName="ShoppingLists"
+         >
+            <Stack.Screen
+               name="ShoppingLists"
+            >
+               {/* note method for passing props to a screen */}
+               {props => <ShoppingLists db={db} {...props} />}
+            </Stack.Screen>
+         </Stack.Navigator>
+      </NavigationContainer>
+   );
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
+
