@@ -31,13 +31,12 @@ const App = () => {
    return (
       <NavigationContainer>
          <Stack.Navigator
-            initialRouteName="ShoppingLists"
+            initialRouteName="Welcome"
          >
             <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen
                name="ShoppingLists"
             >
-               {/* note method for passing props to a screen */}
                {props => <ShoppingLists db={db} {...props} />}
             </Stack.Screen>
          </Stack.Navigator>
