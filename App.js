@@ -10,6 +10,7 @@ import { getFirestore } from "firebase/firestore";
 
 // import the screens
 import ShoppingLists from './components/ShoppingLists';
+import Welcome from './components/Welcome';
 
 const App = () => {
    const firebaseConfig = {
@@ -32,6 +33,7 @@ const App = () => {
          <Stack.Navigator
             initialRouteName="ShoppingLists"
          >
+            <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen
                name="ShoppingLists"
             >
