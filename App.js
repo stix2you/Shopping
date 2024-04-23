@@ -37,7 +37,10 @@ const App = () => {
          <Stack.Navigator
             initialRouteName="Welcome"
          >
-            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen
+               name="Welcome"
+               component={Welcome}
+            />
             <Stack.Screen
                name="ShoppingLists"
             >

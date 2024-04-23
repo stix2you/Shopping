@@ -12,7 +12,7 @@ const Welcome = ({ navigation }) => {
             Alert.alert("Signed in Successfully!");
          })
          .catch((error) => {  // if error, show an alert
-            Alert.alert("Unable to sign in, try later again.");
+            Alert.alert("Unable to sign in, try again.");
          })
    }
 
